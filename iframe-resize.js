@@ -17,43 +17,26 @@
     return Math.ceil(root.getBoundingClientRect().height);
   }
 
-  function postHeight(reason) {
+  function postHeight() {
     var height = measureHeight();
-    window.parent.postMessage(
-      {
-        source: SOURCE,
-        height: height,
-        reason: reason,
-        cardCount: document.querySelectorAll("#card-grid > *").length,
-        readyState: document.readyState,
-      },
-      "*"
-    );
     if (height === lastHeight || height <= 0) {
       return;
     }
     lastHeight = height;
+    window.parent.postMessage({ source: SOURCE, height: height }, "*");
   }
 
   if (window.ResizeObserver) {
-    new ResizeObserver(function () {
-      postHeight("resize-observer");
-    }).observe(document.documentElement);
+    new ResizeObserver(postHeight).observe(document.documentElement);
   }
 
-  new MutationObserver(function () {
-    postHeight("mutation-observer");
-  }).observe(document.body, {
+  new MutationObserver(postHeight).observe(document.body, {
     childList: true,
     subtree: true,
     attributes: true,
   });
 
-  window.addEventListener("load", function () {
-    postHeight("load");
-  });
-  window.addEventListener("resize", function () {
-    postHeight("window-resize");
-  });
-  postHeight("initial");
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  postHeight();
 })();
