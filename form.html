@@ -1,326 +1,694 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Factsheet — Header Form</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="app-shell">
-  <div class="topbar">
-    <div style="display:flex; align-items:center; gap:14px">
-      <a href="list.html" aria-label="Back to list" style="display:flex; align-items:center; color:var(--text-muted)">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-      </a>
-      <div style="width:1px; height:22px; background:var(--border)"></div>
-      <div>
-        <div class="crumbs">Factsheets / <span id="form-mode-label">Edit header</span></div>
-        <div class="screen-title" id="form-title-crumb">Untitled factsheet</div>
-      </div>
-    </div>
-    <div style="display:flex; align-items:center; gap:10px">
-      <span style="font-size:12px; color:var(--text-faint)" id="form-autosave">Not saved yet</span>
-      <a href="list.html" class="btn">Cancel</a>
-      <button class="btn btn-primary" id="form-continue">Save &amp; continue to sections</button>
-    </div>
-  </div>
-
-  <div class="page-body" style="display:grid; grid-template-columns:2fr 1fr; gap:20px" id="form-grid">
-    <div style="display:flex; flex-direction:column; gap:20px">
-
-      <div class="card" style="padding:22px 24px">
-        <div style="font-size:15px; font-weight:600; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border)">Cover details</div>
-        <div class="field-grid">
-          <div style="grid-column:span 2">
-            <label class="label" for="f-title">Title <span style="color:var(--danger)">*</span></label>
-            <input id="f-title" type="text" placeholder="e.g. Nova Traction Elevator">
-          </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Factsheet — Header Form</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="topbar">
+        <div style="display: flex; align-items: center; gap: 14px">
+          <a
+            href="list.html"
+            aria-label="Back to list"
+            style="display: flex; align-items: center; color: var(--text-muted)"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+          </a>
+          <div
+            style="width: 1px; height: 22px; background: var(--border)"
+          ></div>
           <div>
-            <label class="label" for="f-code">Product code <span style="color:var(--danger)">*</span></label>
-            <input id="f-code" type="text" placeholder="e.g. ELV-2200">
-          </div>
-          <div>
-            <label class="label">Status</label>
-            <div style="height:34px; display:flex; align-items:center">
-              <span class="badge" id="f-status-badge" style="background:var(--neutral-bg); color:var(--neutral-fg)">Draft</span>
+            <div class="crumbs">
+              Factsheets / <span id="form-mode-label">Edit header</span>
             </div>
-            <div class="hint">Set automatically — Draft until the page &amp; PDF are generated.</div>
-          </div>
-          <div style="grid-column:span 2">
-            <label class="label" for="f-tag">Tagline</label>
-            <input id="f-tag" type="text" placeholder="One line describing the product">
-            <div class="hint">Shown as the H2 under the product code on the hero banner.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="padding:22px 24px">
-        <div style="font-size:15px; font-weight:600; margin-bottom:4px">Hero image</div>
-        <div class="hint" style="margin-bottom:14px">Full-width banner behind the product code and tagline.</div>
-        <div style="display:flex; gap:16px; align-items:center">
-          <div id="hero-preview-thumb" style="width:200px; height:110px; border-radius:4px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:600; background:var(--primary)">No image</div>
-          <div style="display:flex; flex-direction:column; gap:8px">
-            <label class="btn btn-sm" style="width:fit-content">
-              Upload image
-              <input type="file" accept="image/*" id="hero-file" style="display:none">
-            </label>
-            <button class="btn-ghost" style="border:none; background:none; font-size:13px; color:var(--danger); text-align:left; padding:2px 0" id="hero-remove">Remove</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="padding:22px 24px">
-        <div style="font-size:15px; font-weight:600; margin-bottom:2px">Webparts data</div>
-        <div class="hint" style="margin-bottom:16px">Custom SPFx webpart properties, stored as JSON on the header item.</div>
-
-        <div style="margin-bottom:22px">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
-            <div style="font-size:13px; font-weight:700; color:var(--text-muted)">Quicklinks</div>
-            <button class="btn btn-sm" id="add-quicklink" style="color:var(--primary); border-color:var(--primary)">+ Add link</button>
-          </div>
-          <div id="quicklinks-list" style="display:flex; flex-direction:column; gap:8px"></div>
-        </div>
-
-        <div>
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
-            <div style="font-size:13px; font-weight:700; color:var(--text-muted)">Contact persons</div>
-            <button class="btn btn-sm" id="add-contact" style="color:var(--primary); border-color:var(--primary)">+ Add contact</button>
-          </div>
-          <div id="contacts-list" style="display:flex; flex-direction:column; gap:10px"></div>
-        </div>
-      </div>
-    </div>
-
-    <div style="display:flex; flex-direction:column; gap:20px">
-      <div class="card" style="padding:20px" id="generated-outputs-card">
-        <div style="font-size:14px; font-weight:600; margin-bottom:14px">Generated outputs</div>
-        <div style="display:flex; flex-direction:column; gap:14px">
-          <div>
-            <div class="label">Generated page URL</div>
-            <div style="display:flex; align-items:center; gap:8px; height:32px; padding:0 10px; border:1px solid var(--border); border-radius:2px; background:var(--neutral-bg)">
-              <span id="gen-page-url" style="font-size:12px; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">— not generated yet —</span>
+            <div class="screen-title" id="form-title-crumb">
+              Untitled factsheet
             </div>
           </div>
-          <div>
-            <div class="label">Generated PDF URL</div>
-            <div style="display:flex; align-items:center; gap:8px; height:32px; padding:0 10px; border:1px solid var(--border); border-radius:2px; background:var(--neutral-bg)">
-              <span id="gen-pdf-url" style="font-size:12px; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap">— not generated yet —</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px">
+          <span
+            style="font-size: 12px; color: var(--text-faint)"
+            id="form-autosave"
+            >Not saved yet</span
+          >
+          <a href="list.html" class="btn">Cancel</a>
+          <button class="btn btn-primary" id="form-continue">
+            Save &amp; continue to sections
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="page-body"
+        style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px"
+        id="form-grid"
+      >
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <div class="card" style="padding: 22px 24px">
+            <div
+              style="
+                font-size: 15px;
+                font-weight: 600;
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid var(--border);
+              "
+            >
+              Cover details
+            </div>
+            <div class="field-grid">
+              <div style="grid-column: span 2">
+                <label class="label" for="f-title"
+                  >Title <span style="color: var(--danger)">*</span></label
+                >
+                <input
+                  id="f-title"
+                  type="text"
+                  placeholder="e.g. Nova Traction Elevator"
+                />
+              </div>
+              <div>
+                <label class="label" for="f-code"
+                  >Product code
+                  <span style="color: var(--danger)">*</span></label
+                >
+                <input id="f-code" type="text" placeholder="e.g. ELV-2200" />
+              </div>
+              <div>
+                <label class="label">Status</label>
+                <div style="height: 34px; display: flex; align-items: center">
+                  <span
+                    class="badge"
+                    id="f-status-badge"
+                    style="
+                      background: var(--neutral-bg);
+                      color: var(--neutral-fg);
+                    "
+                    >Draft</span
+                  >
+                </div>
+                <div class="hint">
+                  Set automatically — Draft until the page &amp; PDF are
+                  generated.
+                </div>
+              </div>
+              <div style="grid-column: span 2">
+                <label class="label" for="f-tag">Tagline</label>
+                <input
+                  id="f-tag"
+                  type="text"
+                  placeholder="One line describing the product"
+                />
+                <div class="hint">
+                  Shown as the H2 under the product code on the hero banner.
+                </div>
+              </div>
             </div>
           </div>
-          <div class="hint" style="margin-top:-4px">Populated by Power Automate once the flow runs — read only here.</div>
-        </div>
-      </div>
 
-      <div class="card" style="padding:20px" id="hero-preview-card">
-        <div style="font-size:14px; font-weight:600; margin-bottom:12px">Hero preview</div>
-        <div style="border-radius:4px; overflow:hidden; border:1px solid var(--border)">
-          <div id="hero-preview-band" style="height:80px; background:var(--primary)"></div>
-          <div style="padding:14px; background:var(--surface)">
-            <div id="hero-preview-code" style="font-size:15px; font-weight:800; color:#D40000">PRODUCT-CODE</div>
-            <div id="hero-preview-tag" style="font-size:11px; color:var(--text-muted); margin-top:2px">Tagline will appear here</div>
+          <div class="card" style="padding: 22px 24px">
+            <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px">
+              Hero image
+            </div>
+            <div class="hint" style="margin-bottom: 14px">
+              Full-width banner behind the product code and tagline.
+            </div>
+            <div style="display: flex; gap: 16px; align-items: center">
+              <div
+                id="hero-preview-thumb"
+                style="
+                  width: 200px;
+                  height: 110px;
+                  border-radius: 4px;
+                  flex: 0 0 auto;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #fff;
+                  font-size: 12px;
+                  font-weight: 600;
+                  background: var(--primary);
+                "
+              >
+                No image
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <label class="btn btn-sm" style="width: fit-content">
+                  Upload image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="hero-file"
+                    style="display: none"
+                  />
+                </label>
+                <button
+                  class="btn-ghost"
+                  style="
+                    border: none;
+                    background: none;
+                    font-size: 13px;
+                    color: var(--danger);
+                    text-align: left;
+                    padding: 2px 0;
+                  "
+                  id="hero-remove"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 22px 24px">
+            <div style="font-size: 15px; font-weight: 600; margin-bottom: 2px">
+              Webparts data
+            </div>
+            <div class="hint" style="margin-bottom: 16px">
+              Custom SPFx webpart properties, stored as JSON on the header item.
+            </div>
+
+            <div style="margin-bottom: 22px">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  margin-bottom: 10px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: var(--text-muted);
+                  "
+                >
+                  Quicklinks
+                </div>
+                <button
+                  class="btn btn-sm"
+                  id="add-quicklink"
+                  style="color: var(--primary); border-color: var(--primary)"
+                >
+                  + Add link
+                </button>
+              </div>
+              <div
+                id="quicklinks-list"
+                style="display: flex; flex-direction: column; gap: 8px"
+              ></div>
+            </div>
+
+            <div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  margin-bottom: 10px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: var(--text-muted);
+                  "
+                >
+                  Contact persons
+                </div>
+                <button
+                  class="btn btn-sm"
+                  id="add-contact"
+                  style="color: var(--primary); border-color: var(--primary)"
+                >
+                  + Add contact
+                </button>
+              </div>
+              <div
+                id="contacts-list"
+                style="display: flex; flex-direction: column; gap: 10px"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <div class="card" style="padding: 20px" id="generated-outputs-card">
+            <div style="font-size: 14px; font-weight: 600; margin-bottom: 14px">
+              Generated outputs
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px">
+              <div>
+                <div class="label">Generated page URL</div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    height: 32px;
+                    padding: 0 10px;
+                    border: 1px solid var(--border);
+                    border-radius: 2px;
+                    background: var(--neutral-bg);
+                  "
+                >
+                  <span
+                    id="gen-page-url"
+                    style="
+                      font-size: 12px;
+                      color: var(--text-muted);
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;
+                    "
+                    >— not generated yet —</span
+                  >
+                </div>
+              </div>
+              <div>
+                <div class="label">Generated PDF URL</div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    height: 32px;
+                    padding: 0 10px;
+                    border: 1px solid var(--border);
+                    border-radius: 2px;
+                    background: var(--neutral-bg);
+                  "
+                >
+                  <span
+                    id="gen-pdf-url"
+                    style="
+                      font-size: 12px;
+                      color: var(--text-muted);
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;
+                    "
+                    >— not generated yet —</span
+                  >
+                </div>
+              </div>
+              <div class="hint" style="margin-top: -4px">
+                Populated by Power Automate once the flow runs — read only here.
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 20px" id="hero-preview-card">
+            <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px">
+              Hero preview
+            </div>
+            <div
+              style="
+                border-radius: 4px;
+                overflow: hidden;
+                border: 1px solid var(--border);
+              "
+            >
+              <div
+                id="hero-preview-band"
+                style="height: 80px; background: var(--primary)"
+              ></div>
+              <div style="padding: 14px; background: var(--surface)">
+                <div
+                  id="hero-preview-code"
+                  style="font-size: 15px; font-weight: 800; color: #d40000"
+                >
+                  PRODUCT-CODE
+                </div>
+                <div
+                  id="hero-preview-tag"
+                  style="
+                    font-size: 11px;
+                    color: var(--text-muted);
+                    margin-top: 2px;
+                  "
+                >
+                  Tagline will appear here
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              background: var(--warn-bg);
+              border: 1px solid var(--warn-border);
+              border-radius: 6px;
+              padding: 16px;
+              display: flex;
+              gap: 10px;
+            "
+            id="generate-warning-card"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--warn-fg)"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="flex: 0 0 auto; margin-top: 1px"
+            >
+              <path
+                d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"
+              />
+              <path d="M12 9v4" />
+              <path d="M12 17h.01" />
+            </svg>
+            <div
+              style="font-size: 12px; color: var(--warn-fg); line-height: 1.5"
+            >
+              The page/PDF generation flow triggers on Status change or the
+              "Generate" button — not on every field edit.
+            </div>
           </div>
         </div>
       </div>
-
-      <div style="background:var(--warn-bg); border:1px solid var(--warn-border); border-radius:6px; padding:16px; display:flex; gap:10px" id="generate-warning-card">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warn-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto; margin-top:1px"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-        <div style="font-size:12px; color:var(--warn-fg); line-height:1.5">The page/PDF generation flow triggers on Status change or the "Generate" button — not on every field edit.</div>
-      </div>
     </div>
-  </div>
-</div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="data.js"></script>
-<script>
-(function () {
-  "use strict";
-  var Store = window.FactsheetStore;
-  var data = Store.load();
-  var params = new URLSearchParams(window.location.search);
-  var id = params.get("id");
-  var isNew = params.get("new") === "1";
+    <script src="data.js"></script>
+    <script>
+      (function () {
+        "use strict";
+        var Store = window.FactsheetStore;
+        var data = Store.load();
+        var params = new URLSearchParams(window.location.search);
+        var id = params.get("id");
+        var isNew = params.get("new") === "1";
 
-  var fs = null;
-  for (var i = 0; i < data.length; i++) { if (data[i].id === id) { fs = data[i]; break; } }
-  if (!fs) {
-    fs = Store.makeFactsheet("", "", "", "Draft", []);
-    data.unshift(fs);
-    Store.save(data);
-    isNew = true;
-  }
-
-  var toastEl = document.getElementById("toast");
-  var toastTimer = null;
-  function toast(msg) {
-    toastEl.textContent = msg;
-    toastEl.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 1800);
-  }
-
-  var fTitle = document.getElementById("f-title");
-  var fCode = document.getElementById("f-code");
-  var fTag = document.getElementById("f-tag");
-
-  document.getElementById("form-mode-label").textContent = isNew ? "New header" : "Edit header";
-  document.getElementById("form-autosave").textContent = isNew ? "Not saved yet" : "Autosaved just now";
-  fTitle.value = fs.title;
-  fCode.value = fs.code;
-  fTag.value = fs.tagline;
-
-  function renderStatusBadge() {
-    var badge = document.getElementById("f-status-badge");
-    badge.textContent = fs.status;
-    if (fs.status === "Published") {
-      badge.style.background = "var(--success-bg)"; badge.style.color = "var(--success-fg)";
-    } else {
-      badge.style.background = "var(--neutral-bg)"; badge.style.color = "var(--neutral-fg)";
-    }
-  }
-  renderStatusBadge();
-
-  document.getElementById("generated-outputs-card").style.display = isNew ? "none" : "block";
-  document.getElementById("hero-preview-card").style.display = isNew ? "none" : "block";
-  document.getElementById("generate-warning-card").style.display = isNew ? "none" : "flex";
-  document.getElementById("form-grid").style.gridTemplateColumns = isNew ? "1fr" : "2fr 1fr";
-
-  function renderHeroPreview() {
-    var thumb = document.getElementById("hero-preview-thumb");
-    var band = document.getElementById("hero-preview-band");
-    if (fs.heroDataUrl) {
-      thumb.style.backgroundImage = "url(" + fs.heroDataUrl + ")";
-      thumb.style.backgroundSize = "cover";
-      thumb.style.backgroundPosition = "center";
-      thumb.textContent = "";
-      band.style.backgroundImage = "url(" + fs.heroDataUrl + ")";
-      band.style.backgroundSize = "cover";
-      band.style.backgroundPosition = "center";
-    } else {
-      thumb.style.backgroundImage = "none";
-      thumb.style.background = Store.colorFor(fs.code || fs.id);
-      thumb.textContent = "No image";
-      band.style.backgroundImage = "none";
-      band.style.background = Store.colorFor(fs.code || fs.id);
-    }
-    document.getElementById("hero-preview-code").textContent = fs.code || "PRODUCT-CODE";
-    document.getElementById("hero-preview-tag").textContent = fs.tagline || "Tagline will appear here";
-  }
-
-  function renderGeneratedUrls() {
-    document.getElementById("gen-page-url").textContent = fs.generatedPageUrl || "— not generated yet —";
-    document.getElementById("gen-pdf-url").textContent = fs.generatedPdfUrl || "— not generated yet —";
-  }
-
-  function syncFieldsToModel() {
-    fs.title = fTitle.value;
-    fs.code = fCode.value;
-    fs.tagline = fTag.value;
-    document.getElementById("form-title-crumb").textContent = fs.title || "Untitled factsheet";
-    renderHeroPreview();
-    renderGeneratedUrls();
-    Store.save(data);
-  }
-  [fTitle, fCode, fTag].forEach(function (el) {
-    el.addEventListener("input", syncFieldsToModel);
-    el.addEventListener("change", syncFieldsToModel);
-  });
-
-  document.getElementById("hero-file").addEventListener("change", function (e) {
-    var file = e.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function () {
-      fs.heroDataUrl = reader.result;
-      renderHeroPreview();
-      Store.save(data);
-      toast("Hero image updated");
-    };
-    reader.readAsDataURL(file);
-  });
-  document.getElementById("hero-remove").addEventListener("click", function () {
-    fs.heroDataUrl = null; renderHeroPreview(); Store.save(data);
-  });
-
-  function renderQuicklinks() {
-    var wrap = document.getElementById("quicklinks-list");
-    wrap.innerHTML = "";
-    if (fs.quicklinks.length === 0) { wrap.innerHTML = '<div class="hint">No quicklinks yet — add one above.</div>'; }
-    fs.quicklinks.forEach(function (q) {
-      var row = document.createElement("div");
-      row.className = "repeater-row";
-      row.innerHTML =
-        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="6" r="1.2"/><circle cx="5" cy="12" r="1.2"/><circle cx="5" cy="18" r="1.2"/><circle cx="12" cy="6" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="18" r="1.2"/></svg>' +
-        '<input type="text" value="' + Store.escapeAttr(q.label) + '" aria-label="Link label" data-f="label">' +
-        '<input type="text" value="' + Store.escapeAttr(q.url) + '" aria-label="Link URL" data-f="url">' +
-        '<button type="button" aria-label="Remove link" class="tb-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>';
-      row.querySelector('[data-f="label"]').addEventListener("input", function (e) { q.label = e.target.value; Store.save(data); });
-      row.querySelector('[data-f="url"]').addEventListener("input", function (e) { q.url = e.target.value; Store.save(data); });
-      row.querySelector("button").addEventListener("click", function () {
-        fs.quicklinks = fs.quicklinks.filter(function (x) { return x.id !== q.id; });
-        Store.save(data); renderQuicklinks(); toast("Link removed");
-      });
-      wrap.appendChild(row);
-    });
-  }
-  document.getElementById("add-quicklink").addEventListener("click", function () {
-    fs.quicklinks.push({ id: Store.uid(), label: "", url: "" });
-    Store.save(data); renderQuicklinks();
-  });
-
-  function renderContacts() {
-    var wrap = document.getElementById("contacts-list");
-    wrap.innerHTML = "";
-    if (fs.contacts.length === 0) { wrap.innerHTML = '<div class="hint">No contacts yet — add one above.</div>'; }
-    fs.contacts.forEach(function (c) {
-      var row = document.createElement("div");
-      row.className = "contact-row";
-      var initials = (c.name || "?").split(" ").map(function (s) { return s[0] || ""; }).join("").slice(0, 2).toUpperCase() || "?";
-      row.innerHTML =
-        '<div class="avatar" style="background:' + Store.colorFor(c.id) + '">' + initials + '</div>' +
-        '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; flex:1">' +
-          '<input type="text" value="' + Store.escapeAttr(c.name) + '" placeholder="Name" data-f="name">' +
-          '<input type="text" value="' + Store.escapeAttr(c.role) + '" placeholder="Role" data-f="role">' +
-          '<input type="text" value="' + Store.escapeAttr(c.email) + '" placeholder="Email" data-f="email">' +
-          '<input type="text" value="' + Store.escapeAttr(c.phone) + '" placeholder="Phone" data-f="phone">' +
-        '</div>' +
-        '<button type="button" aria-label="Remove contact" class="tb-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>';
-      ["name", "role", "email", "phone"].forEach(function (f) {
-        row.querySelector('[data-f="' + f + '"]').addEventListener("input", function (e) {
-          c[f] = e.target.value;
-          Store.save(data);
-          if (f === "name") {
-            var av = row.querySelector(".avatar");
-            av.textContent = (c.name || "?").split(" ").map(function (s) { return s[0] || ""; }).join("").slice(0, 2).toUpperCase() || "?";
+        var fs = null;
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].id === id) {
+            fs = data[i];
+            break;
           }
+        }
+        if (!fs) {
+          fs = Store.makeFactsheet("", "", "", "Draft", []);
+          data.unshift(fs);
+          Store.save(data);
+          isNew = true;
+        }
+
+        var toastEl = document.getElementById("toast");
+        var toastTimer = null;
+        function toast(msg) {
+          toastEl.textContent = msg;
+          toastEl.classList.add("show");
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () {
+            toastEl.classList.remove("show");
+          }, 1800);
+        }
+
+        var fTitle = document.getElementById("f-title");
+        var fCode = document.getElementById("f-code");
+        var fTag = document.getElementById("f-tag");
+
+        document.getElementById("form-mode-label").textContent = isNew
+          ? "New header"
+          : "Edit header";
+        document.getElementById("form-autosave").textContent = isNew
+          ? "Not saved yet"
+          : "Autosaved just now";
+        fTitle.value = fs.title;
+        fCode.value = fs.code;
+        fTag.value = fs.tagline;
+
+        function renderStatusBadge() {
+          var badge = document.getElementById("f-status-badge");
+          badge.textContent = fs.status;
+          if (fs.status === "Published") {
+            badge.style.background = "var(--success-bg)";
+            badge.style.color = "var(--success-fg)";
+          } else {
+            badge.style.background = "var(--neutral-bg)";
+            badge.style.color = "var(--neutral-fg)";
+          }
+        }
+        renderStatusBadge();
+
+        document.getElementById("generated-outputs-card").style.display = isNew
+          ? "none"
+          : "block";
+        document.getElementById("hero-preview-card").style.display = isNew
+          ? "none"
+          : "block";
+        document.getElementById("generate-warning-card").style.display = isNew
+          ? "none"
+          : "flex";
+        document.getElementById("form-grid").style.gridTemplateColumns = isNew
+          ? "1fr"
+          : "2fr 1fr";
+
+        function renderHeroPreview() {
+          var thumb = document.getElementById("hero-preview-thumb");
+          var band = document.getElementById("hero-preview-band");
+          if (fs.heroDataUrl) {
+            thumb.style.backgroundImage = "url(" + fs.heroDataUrl + ")";
+            thumb.style.backgroundSize = "cover";
+            thumb.style.backgroundPosition = "center";
+            thumb.textContent = "";
+            band.style.backgroundImage = "url(" + fs.heroDataUrl + ")";
+            band.style.backgroundSize = "cover";
+            band.style.backgroundPosition = "center";
+          } else {
+            thumb.style.backgroundImage = "none";
+            thumb.style.background = Store.colorFor(fs.code || fs.id);
+            thumb.textContent = "No image";
+            band.style.backgroundImage = "none";
+            band.style.background = Store.colorFor(fs.code || fs.id);
+          }
+          document.getElementById("hero-preview-code").textContent =
+            fs.code || "PRODUCT-CODE";
+          document.getElementById("hero-preview-tag").textContent =
+            fs.tagline || "Tagline will appear here";
+        }
+
+        function renderGeneratedUrls() {
+          document.getElementById("gen-page-url").textContent =
+            fs.generatedPageUrl || "— not generated yet —";
+          document.getElementById("gen-pdf-url").textContent =
+            fs.generatedPdfUrl || "— not generated yet —";
+        }
+
+        function syncFieldsToModel() {
+          fs.title = fTitle.value;
+          fs.code = fCode.value;
+          fs.tagline = fTag.value;
+          document.getElementById("form-title-crumb").textContent =
+            fs.title || "Untitled factsheet";
+          renderHeroPreview();
+          renderGeneratedUrls();
+          Store.save(data);
+        }
+        [fTitle, fCode, fTag].forEach(function (el) {
+          el.addEventListener("input", syncFieldsToModel);
+          el.addEventListener("change", syncFieldsToModel);
         });
-      });
-      row.querySelector("button").addEventListener("click", function () {
-        fs.contacts = fs.contacts.filter(function (x) { return x.id !== c.id; });
-        Store.save(data); renderContacts(); toast("Contact removed");
-      });
-      wrap.appendChild(row);
-    });
-  }
-  document.getElementById("add-contact").addEventListener("click", function () {
-    fs.contacts.push({ id: Store.uid(), name: "", role: "", email: "", phone: "" });
-    Store.save(data); renderContacts();
-  });
 
-  document.getElementById("form-continue").addEventListener("click", function () {
-    if (!fs.title || !fs.code) { toast("Title and product code are required"); return; }
-    Store.save(data);
-    document.getElementById("form-autosave").textContent = "Autosaved just now";
-    window.location.href = "details.html?id=" + encodeURIComponent(fs.id);
-  });
+        document
+          .getElementById("hero-file")
+          .addEventListener("change", function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function () {
+              fs.heroDataUrl = reader.result;
+              renderHeroPreview();
+              Store.save(data);
+              toast("Hero image updated");
+            };
+            reader.readAsDataURL(file);
+          });
+        document
+          .getElementById("hero-remove")
+          .addEventListener("click", function () {
+            fs.heroDataUrl = null;
+            renderHeroPreview();
+            Store.save(data);
+          });
 
-  renderHeroPreview();
-  renderGeneratedUrls();
-  renderQuicklinks();
-  renderContacts();
-})();
-</script>
-</body>
+        function renderQuicklinks() {
+          var wrap = document.getElementById("quicklinks-list");
+          wrap.innerHTML = "";
+          if (fs.quicklinks.length === 0) {
+            wrap.innerHTML =
+              '<div class="hint">No quicklinks yet — add one above.</div>';
+          }
+          fs.quicklinks.forEach(function (q) {
+            var row = document.createElement("div");
+            row.className = "repeater-row";
+            row.innerHTML =
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="6" r="1.2"/><circle cx="5" cy="12" r="1.2"/><circle cx="5" cy="18" r="1.2"/><circle cx="12" cy="6" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="18" r="1.2"/></svg>' +
+              '<input type="text" value="' +
+              Store.escapeAttr(q.label) +
+              '" aria-label="Link label" data-f="label">' +
+              '<input type="text" value="' +
+              Store.escapeAttr(q.url) +
+              '" aria-label="Link URL" data-f="url">' +
+              '<button type="button" aria-label="Remove link" class="tb-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>';
+            row
+              .querySelector('[data-f="label"]')
+              .addEventListener("input", function (e) {
+                q.label = e.target.value;
+                Store.save(data);
+              });
+            row
+              .querySelector('[data-f="url"]')
+              .addEventListener("input", function (e) {
+                q.url = e.target.value;
+                Store.save(data);
+              });
+            row.querySelector("button").addEventListener("click", function () {
+              fs.quicklinks = fs.quicklinks.filter(function (x) {
+                return x.id !== q.id;
+              });
+              Store.save(data);
+              renderQuicklinks();
+              toast("Link removed");
+            });
+            wrap.appendChild(row);
+          });
+        }
+        document
+          .getElementById("add-quicklink")
+          .addEventListener("click", function () {
+            fs.quicklinks.push({ id: Store.uid(), label: "", url: "" });
+            Store.save(data);
+            renderQuicklinks();
+          });
+
+        function renderContacts() {
+          var wrap = document.getElementById("contacts-list");
+          wrap.innerHTML = "";
+          if (fs.contacts.length === 0) {
+            wrap.innerHTML =
+              '<div class="hint">No contacts yet — add one above.</div>';
+          }
+          fs.contacts.forEach(function (c) {
+            var row = document.createElement("div");
+            row.className = "contact-row";
+            var initials =
+              (c.name || "?")
+                .split(" ")
+                .map(function (s) {
+                  return s[0] || "";
+                })
+                .join("")
+                .slice(0, 2)
+                .toUpperCase() || "?";
+            row.innerHTML =
+              '<div class="avatar" style="background:' +
+              Store.colorFor(c.id) +
+              '">' +
+              initials +
+              "</div>" +
+              '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; flex:1">' +
+              '<input type="text" value="' +
+              Store.escapeAttr(c.name) +
+              '" placeholder="Name" data-f="name">' +
+              '<input type="text" value="' +
+              Store.escapeAttr(c.role) +
+              '" placeholder="Role" data-f="role">' +
+              '<input type="text" value="' +
+              Store.escapeAttr(c.email) +
+              '" placeholder="Email" data-f="email">' +
+              '<input type="text" value="' +
+              Store.escapeAttr(c.phone) +
+              '" placeholder="Phone" data-f="phone">' +
+              "</div>" +
+              '<button type="button" aria-label="Remove contact" class="tb-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>';
+            ["name", "role", "email", "phone"].forEach(function (f) {
+              row
+                .querySelector('[data-f="' + f + '"]')
+                .addEventListener("input", function (e) {
+                  c[f] = e.target.value;
+                  Store.save(data);
+                  if (f === "name") {
+                    var av = row.querySelector(".avatar");
+                    av.textContent =
+                      (c.name || "?")
+                        .split(" ")
+                        .map(function (s) {
+                          return s[0] || "";
+                        })
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase() || "?";
+                  }
+                });
+            });
+            row.querySelector("button").addEventListener("click", function () {
+              fs.contacts = fs.contacts.filter(function (x) {
+                return x.id !== c.id;
+              });
+              Store.save(data);
+              renderContacts();
+              toast("Contact removed");
+            });
+            wrap.appendChild(row);
+          });
+        }
+        document
+          .getElementById("add-contact")
+          .addEventListener("click", function () {
+            fs.contacts.push({
+              id: Store.uid(),
+              name: "",
+              role: "",
+              email: "",
+              phone: "",
+            });
+            Store.save(data);
+            renderContacts();
+          });
+
+        document
+          .getElementById("form-continue")
+          .addEventListener("click", function () {
+            if (!fs.title || !fs.code) {
+              toast("Title and product code are required");
+              return;
+            }
+            Store.save(data);
+            document.getElementById("form-autosave").textContent =
+              "Autosaved just now";
+            window.location.href = "index.html?id=" + encodeURIComponent(fs.id);
+          });
+
+        renderHeroPreview();
+        renderGeneratedUrls();
+        renderQuicklinks();
+        renderContacts();
+      })();
+    </script>
+  </body>
 </html>

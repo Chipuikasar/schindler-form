@@ -1,159 +1,270 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Factsheets — List</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="app-shell">
-  <div class="topbar">
-    <div style="display:flex; align-items:center; gap:12px">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v5"/></svg>
-      <span class="screen-title">Product Factsheet Generator</span>
-    </div>
-    <div style="display:flex; align-items:center; gap:14px">
-      <button class="btn btn-ghost btn-sm" id="reset-data">Reset sample data</button>
-      <span style="font-size:12px; color:var(--text-faint)">Schindler — Production</span>
-    </div>
-  </div>
-
-  <div class="page-body">
-    <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:16px">
-      <div>
-        <div style="font-size:22px; font-weight:600">Factsheets</div>
-        <div style="font-size:13px; color:var(--text-muted); margin-top:2px"><span id="list-count">0</span> items in FactsheetHeader</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Factsheets — List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="topbar">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--primary)"
+            stroke-width="1.8"
+          >
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <path d="M3 9h18" />
+            <path d="M8 4v5" />
+          </svg>
+          <span class="screen-title">Product Factsheet Generator</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <button class="btn btn-ghost btn-sm" id="reset-data">
+            Reset sample data
+          </button>
+          <span style="font-size: 12px; color: var(--text-faint)"
+            >Schindler — Production</span
+          >
+        </div>
       </div>
-      <button class="btn btn-primary" id="btn-new-factsheet">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        New factsheet
-      </button>
-    </div>
 
-    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap">
-      <div class="search-box">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="text" id="search-input" placeholder="Search by title or product code" aria-label="Search factsheets">
+      <div class="page-body">
+        <div
+          style="
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 16px;
+          "
+        >
+          <div>
+            <div style="font-size: 22px; font-weight: 600">Factsheets</div>
+            <div
+              style="font-size: 13px; color: var(--text-muted); margin-top: 2px"
+            >
+              <span id="list-count">0</span> items in FactsheetHeader
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btn-new-factsheet">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#fff"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            New factsheet
+          </button>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+          "
+        >
+          <div class="search-box">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--text-faint)"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.3-4.3" />
+            </svg>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search by title or product code"
+              aria-label="Search factsheets"
+            />
+          </div>
+          <div
+            style="display: flex; gap: 8px"
+            role="group"
+            aria-label="Filter by status"
+            id="filter-group"
+          ></div>
+        </div>
+
+        <div class="grid-cards" id="card-grid"></div>
       </div>
-      <div style="display:flex; gap:8px" role="group" aria-label="Filter by status" id="filter-group"></div>
     </div>
 
-    <div class="grid-cards" id="card-grid"></div>
-  </div>
-</div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="data.js"></script>
+    <script>
+      (function () {
+        "use strict";
+        var Store = window.FactsheetStore;
+        var data = Store.load();
+        var ui = { filter: "All", search: "" };
 
-<script src="data.js"></script>
-<script>
-(function () {
-  "use strict";
-  var Store = window.FactsheetStore;
-  var data = Store.load();
-  var ui = { filter: "All", search: "" };
+        var toastEl = document.getElementById("toast");
+        var toastTimer = null;
+        function toast(msg) {
+          toastEl.textContent = msg;
+          toastEl.classList.add("show");
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () {
+            toastEl.classList.remove("show");
+          }, 1800);
+        }
 
-  var toastEl = document.getElementById("toast");
-  var toastTimer = null;
-  function toast(msg) {
-    toastEl.textContent = msg;
-    toastEl.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 1800);
-  }
+        var filterGroup = document.getElementById("filter-group");
+        ["All", "Published", "Draft"].forEach(function (name) {
+          var b = document.createElement("button");
+          b.className = "pill-filter" + (ui.filter === name ? " active" : "");
+          b.textContent = name;
+          b.dataset.filter = name;
+          b.addEventListener("click", function () {
+            ui.filter = name;
+            render();
+          });
+          filterGroup.appendChild(b);
+        });
 
-  var filterGroup = document.getElementById("filter-group");
-  ["All", "Published", "Draft"].forEach(function (name) {
-    var b = document.createElement("button");
-    b.className = "pill-filter" + (ui.filter === name ? " active" : "");
-    b.textContent = name;
-    b.dataset.filter = name;
-    b.addEventListener("click", function () { ui.filter = name; render(); });
-    filterGroup.appendChild(b);
-  });
+        document
+          .getElementById("search-input")
+          .addEventListener("input", function (e) {
+            ui.search = e.target.value.toLowerCase();
+            render();
+          });
 
-  document.getElementById("search-input").addEventListener("input", function (e) {
-    ui.search = e.target.value.toLowerCase();
-    render();
-  });
+        document
+          .getElementById("btn-new-factsheet")
+          .addEventListener("click", function () {
+            var fs = Store.makeFactsheet("", "", "", "Draft", []);
+            data.unshift(fs);
+            Store.save(data);
+            window.location.href =
+              "form.html?id=" + encodeURIComponent(fs.id) + "&new=1";
+          });
 
-  document.getElementById("btn-new-factsheet").addEventListener("click", function () {
-    var fs = Store.makeFactsheet("", "", "", "Draft", []);
-    data.unshift(fs);
-    Store.save(data);
-    window.location.href = "form.html?id=" + encodeURIComponent(fs.id) + "&new=1";
-  });
+        document
+          .getElementById("reset-data")
+          .addEventListener("click", function () {
+            data = Store.reset();
+            render();
+            toast("Sample data reset");
+          });
 
-  document.getElementById("reset-data").addEventListener("click", function () {
-    data = Store.reset();
-    render();
-    toast("Sample data reset");
-  });
+        function render() {
+          Array.prototype.forEach.call(filterGroup.children, function (b) {
+            b.classList.toggle("active", b.dataset.filter === ui.filter);
+          });
+          var grid = document.getElementById("card-grid");
+          var visible = data.filter(function (fs) {
+            var statusOk = ui.filter === "All" || fs.status === ui.filter;
+            var q = ui.search;
+            var searchOk =
+              !q ||
+              (fs.title || "").toLowerCase().indexOf(q) > -1 ||
+              (fs.code || "").toLowerCase().indexOf(q) > -1;
+            return statusOk && searchOk;
+          });
+          document.getElementById("list-count").textContent = data.length;
 
-  function render() {
-    Array.prototype.forEach.call(filterGroup.children, function (b) {
-      b.classList.toggle("active", b.dataset.filter === ui.filter);
-    });
-    var grid = document.getElementById("card-grid");
-    var visible = data.filter(function (fs) {
-      var statusOk = ui.filter === "All" || fs.status === ui.filter;
-      var q = ui.search;
-      var searchOk = !q || ((fs.title || "").toLowerCase().indexOf(q) > -1 || (fs.code || "").toLowerCase().indexOf(q) > -1);
-      return statusOk && searchOk;
-    });
-    document.getElementById("list-count").textContent = data.length;
+          grid.innerHTML = "";
+          if (visible.length === 0) {
+            var empty = document.createElement("div");
+            empty.className = "empty";
+            empty.style.gridColumn = "1 / -1";
+            empty.textContent = "No factsheets match your filters.";
+            grid.appendChild(empty);
+            return;
+          }
 
-    grid.innerHTML = "";
-    if (visible.length === 0) {
-      var empty = document.createElement("div");
-      empty.className = "empty";
-      empty.style.gridColumn = "1 / -1";
-      empty.textContent = "No factsheets match your filters.";
-      grid.appendChild(empty);
-      return;
-    }
-
-    visible.forEach(function (fs) {
-      var statusBg = fs.status === "Published" ? "var(--success-bg)" : "var(--neutral-bg)";
-      var statusFg = fs.status === "Published" ? "var(--success-fg)" : "var(--neutral-fg)";
-      var card = document.createElement("div");
-      card.className = "fs-card";
-      card.innerHTML =
-        '<div class="fs-hero" style="background:' + Store.colorFor(fs.code || fs.id) + '">' + Store.escapeHtml(fs.code || "UNTITLED") + '</div>' +
-        '<div class="fs-body">' +
-          '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:8px">' +
-            '<div>' +
-              '<div style="font-size:11px; font-weight:700; color:var(--primary); letter-spacing:.04em">' + Store.escapeHtml(fs.code || "NO CODE") + '</div>' +
-              '<div style="font-size:15px; font-weight:600">' + Store.escapeHtml(fs.title || "Untitled factsheet") + '</div>' +
-            '</div>' +
-            '<span class="badge" style="background:' + statusBg + '; color:' + statusFg + '">' + fs.status + '</span>' +
-          '</div>' +
-          '<div style="font-size:13px; color:var(--text-muted); line-height:1.4; min-height:36px">' + Store.escapeHtml(fs.tagline || "No tagline yet") + '</div>' +
-          '<div class="row-actions">' +
-            '<div style="font-size:12px; color:var(--text-faint)">' + fs.sections.length + ' sections</div>' +
-            '<div style="display:flex; gap:14px">' +
+          visible.forEach(function (fs) {
+            var statusBg =
+              fs.status === "Published"
+                ? "var(--success-bg)"
+                : "var(--neutral-bg)";
+            var statusFg =
+              fs.status === "Published"
+                ? "var(--success-fg)"
+                : "var(--neutral-fg)";
+            var card = document.createElement("div");
+            card.className = "fs-card";
+            card.innerHTML =
+              '<div class="fs-hero" style="background:' +
+              Store.colorFor(fs.code || fs.id) +
+              '">' +
+              Store.escapeHtml(fs.code || "UNTITLED") +
+              "</div>" +
+              '<div class="fs-body">' +
+              '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:8px">' +
+              "<div>" +
+              '<div style="font-size:11px; font-weight:700; color:var(--primary); letter-spacing:.04em">' +
+              Store.escapeHtml(fs.code || "NO CODE") +
+              "</div>" +
+              '<div style="font-size:15px; font-weight:600">' +
+              Store.escapeHtml(fs.title || "Untitled factsheet") +
+              "</div>" +
+              "</div>" +
+              '<span class="badge" style="background:' +
+              statusBg +
+              "; color:" +
+              statusFg +
+              '">' +
+              fs.status +
+              "</span>" +
+              "</div>" +
+              '<div style="font-size:13px; color:var(--text-muted); line-height:1.4; min-height:36px">' +
+              Store.escapeHtml(fs.tagline || "No tagline yet") +
+              "</div>" +
+              '<div class="row-actions">' +
+              '<div style="font-size:12px; color:var(--text-faint)">' +
+              fs.sections.length +
+              " sections</div>" +
+              '<div style="display:flex; gap:14px">' +
               '<a data-act="edit" style="font-size:12px; font-weight:600">Edit</a>' +
               '<a data-act="sections" style="font-size:12px; font-weight:600; color:var(--text-muted)">Sections</a>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-      card.querySelector('[data-act="edit"]').addEventListener("click", function (ev) {
-        ev.stopPropagation();
-        window.location.href = "form.html?id=" + encodeURIComponent(fs.id);
-      });
-      card.querySelector('[data-act="sections"]').addEventListener("click", function (ev) {
-        ev.stopPropagation();
-        window.location.href = "details.html?id=" + encodeURIComponent(fs.id);
-      });
-      card.addEventListener("click", function () {
-        window.location.href = "form.html?id=" + encodeURIComponent(fs.id);
-      });
-      grid.appendChild(card);
-    });
-  }
+              "</div>" +
+              "</div>" +
+              "</div>";
+            card
+              .querySelector('[data-act="edit"]')
+              .addEventListener("click", function (ev) {
+                ev.stopPropagation();
+                window.location.href =
+                  "form.html?id=" + encodeURIComponent(fs.id);
+              });
+            card
+              .querySelector('[data-act="sections"]')
+              .addEventListener("click", function (ev) {
+                ev.stopPropagation();
+                window.location.href =
+                  "index.html?id=" + encodeURIComponent(fs.id);
+              });
+            card.addEventListener("click", function () {
+              window.location.href =
+                "form.html?id=" + encodeURIComponent(fs.id);
+            });
+            grid.appendChild(card);
+          });
+        }
 
-  render();
-})();
-</script>
-</body>
+        render();
+      })();
+    </script>
+  </body>
 </html>
