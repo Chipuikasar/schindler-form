@@ -7,9 +7,19 @@
   var SOURCE = "schindler-form-resize";
   var lastHeight = 0;
 
+  function measureHeight() {
+    // document.documentElement.scrollHeight is floored at the iframe's own
+    // viewport height, so it can't report a height smaller than the box the
+    // parent already gave it, and it under-reports true content height on
+    // first paint. Measuring the app's root content element gives its real,
+    // intrinsic height instead.
+    var root = document.querySelector(".app-shell") || document.body;
+    return Math.ceil(root.getBoundingClientRect().height);
+  }
+
   function postHeight() {
-    var height = document.documentElement.scrollHeight;
-    if (height === lastHeight) {
+    var height = measureHeight();
+    if (height === lastHeight || height <= 0) {
       return;
     }
     lastHeight = height;
