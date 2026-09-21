@@ -23,11 +23,11 @@ input,select{
   border-radius:3px; font-size:14px; background:var(--surface); color:var(--text);
 }
 button{cursor:pointer}
-.btn{height:34px; padding:0 16px; border-radius:4px; font-size:13px; font-weight:600; border:1px solid var(--border-strong); background:var(--surface); color:var(--text); display:inline-flex; align-items:center; gap:6px; white-space:nowrap;}
-.btn:hover{background:var(--neutral-bg)}
+.btn{height:34px; padding:0 16px; border-radius:4px; font-size:13px; font-weight:600; border:1px solid var(--primary); background:var(--primary); color:#fff; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;}
+.btn:hover{background:var(--primary-hover); border-color:var(--primary-hover)}
 .btn-primary{background:var(--primary); border-color:var(--primary); color:#fff}
 .btn-primary:hover{background:var(--primary-hover); border-color:var(--primary-hover)}
-.btn-ghost{border:none; background:transparent}
+.btn-ghost{border:none; background:transparent; color:var(--text)}
 .btn-ghost:hover{background:var(--neutral-bg)}
 .btn-sm{height:28px; padding:0 10px; font-size:12px}
 .label{font-size:13px; font-weight:600; margin-bottom:4px; display:block}
