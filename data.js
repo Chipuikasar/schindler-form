@@ -5,12 +5,12 @@
 
   var STORAGE_KEY = "schindler-factsheet-data-v1";
   var COLORS = [
-    "#0F6CBD",
-    "#8764B8",
-    "#107C10",
-    "#C19C00",
-    "#D83B01",
-    "#5B5FC7",
+    "#DC0000",
+    "#111111",
+    "#A80000",
+    "#4D4D4D",
+    "#7A0000",
+    "#000000",
   ];
 
   var counter = 0;
