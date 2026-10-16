@@ -1,0 +1,100 @@
+{
+  "locations": [
+    {
+      "code": "EU",
+      "name": "Europe",
+      "type": "REGION",
+      "countries": [
+        "CH",
+        "IT",
+        "ES",
+        "PT",
+        "BE",
+        "DE",
+        "CZ",
+        "FR",
+        "PL",
+        "GB",
+        "IE",
+        "NL",
+        "NO",
+        "SE",
+        "FI",
+        "DK",
+        "IS",
+        "AT",
+        "RO",
+        "IL",
+        "MA",
+        "SK",
+        "BA",
+        "HR",
+        "EE",
+        "LV",
+        "LI",
+        "LT",
+        "LU",
+        "HU",
+        "MT",
+        "ME",
+        "SI",
+        "RS",
+        "UA"
+      ]
+    },
+    {
+      "code": "AP",
+      "name": "Asia Pacific",
+      "type": "REGION",
+      "countries": [
+        "AR",
+        "CL",
+        "CO",
+        "PE",
+        "UY",
+        "MX",
+        "CR",
+        "BN",
+        "KH",
+        "HK",
+        "MO",
+        "MY",
+        "MM",
+        "ID",
+        "PH",
+        "SG",
+        "TH",
+        "VN",
+        "NZ",
+        "ZA"
+      ]
+    },
+    {
+      "code": "ME",
+      "name": "Middle East",
+      "type": "REGION",
+      "countries": ["EG", "SA", "AE", "QA", "KW", "BH", "OM", "JO", "LB", "IL", "IQ", "IR", "TR", "MA", "DZ", "TN", "LY"]
+    },
+    {
+      "code": "SAO",
+      "name": "South America / SAO",
+      "type": "REGION",
+      "countries": ["BR"]
+    },
+		{
+      "code": "CN",
+      "name": "China",
+      "type": "COUNTRY"
+    },
+		{
+      "code": "AU",
+      "name": "Australia",
+      "type": "COUNTRY"
+    },
+    {
+      "code": "IN",
+      "name": "India",
+      "type": "COUNTRY"
+    }
+  ]
+}
